@@ -1,0 +1,12 @@
+{
+  "name": "api_food_explorer",
+  "version": "1.0.0",
+  "description": "API para entregar dados ao app food explorer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Cadu Dev",
+  "license": "ISC"
+}
