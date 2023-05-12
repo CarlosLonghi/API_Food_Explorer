@@ -4,7 +4,7 @@
   "description": "API para entregar dados ao app food explorer",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch ./src/server.js"
   },
   "keywords": [],
   "author": "Cadu Dev",
@@ -12,4 +12,4 @@
   "dependencies": {
     "express": "^4.18.2"
   }
-}
+}  
