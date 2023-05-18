@@ -4,13 +4,15 @@
   "description": "API para entregar dados ao app food explorer",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch ./src/server.js"
+    "dev": "node ./src/server.js"
   },
   "keywords": [],
   "author": "Cadu Dev",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
     "knex": "^2.4.2",
     "sqlite3": "^5.1.6"
   }
