@@ -4,7 +4,7 @@
   "description": "API para entregar dados ao app food explorer",
   "main": "index.js",
   "scripts": {
-    "dev": "node ./src/server.js"
+    "dev": "nodemon ./src/server.js"
   },
   "keywords": [],
   "author": "Cadu Dev",
@@ -15,5 +15,8 @@
     "express-async-errors": "^3.1.1",
     "knex": "^2.4.2",
     "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
