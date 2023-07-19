@@ -5,5 +5,6 @@ const productRoutes = Router()
 const productController = new ProductController()
 
 productRoutes.post('/', productController.create)
+productRoutes.get('/', productController.index)
 
 module.exports = productRoutes

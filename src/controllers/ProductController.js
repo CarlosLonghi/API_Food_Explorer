@@ -15,6 +15,14 @@ class ProductController {
 
     return response.status(201).json()
   }
+
+  async index(request, response) {
+    const productsGet = await knex('products')
+      .orderBy('created_at')
+      
+    return response.json(productsGet)
+  }
+
 }
 
 module.exports = ProductController
