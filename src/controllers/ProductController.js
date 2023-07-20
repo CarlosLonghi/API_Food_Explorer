@@ -33,6 +33,12 @@ class ProductController {
     return response.json(productsGet)
   }
 
+  async delete(request, response) {
+    const { id } = request.params
+
+    await knex('products').where({ id }).delete()
+    return response.json({ message: 'Produto excluído!' })
+  }
 }
 
 module.exports = ProductController
