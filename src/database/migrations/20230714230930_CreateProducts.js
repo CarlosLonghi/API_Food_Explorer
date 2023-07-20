@@ -1,13 +1,14 @@
 exports.up = knex => {
   return knex.schema.createTable('products', table => {
-    table.increments('id')
+    table.increments('id').primary()
     table.string('name', 100).notNullable()
+    table.integer('category_id').references('id').inTable('product_category')
     table.text('description')
-    table.string('category', 245).notNullable()
     table.string('img_url', 245).notNullable()
     table.string('ingredients', 245).notNullable()
     table.string('price', 100).notNullable()
 
+    table.integer('user_id').references('id').inTable('users')
     table.timestamp('created_at').default(knex.fn.now())
     table.timestamp('updated_at').default(knex.fn.now())
   })
