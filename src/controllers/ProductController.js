@@ -27,12 +27,15 @@ class ProductController {
   }
 
   async index(request, response) {
-    const productsGet = await knex('products')
-      .orderBy('created_at')
-      
-    return response.json(productsGet)
+    const { category_id } = request.query;
+  
+    const productsWithCategory = await knex('products')
+      .join('product_category', 'products.category_id', '=', 'product_category.id')
+      .select('products.*', 'product_category.name as category_name')
+      .where('products.category_id', category_id);
+    return response.json(productsWithCategory);
   }
-
+  
   async delete(request, response) {
     const { id } = request.params
 
