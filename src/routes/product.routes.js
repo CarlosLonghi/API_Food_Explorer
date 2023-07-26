@@ -6,5 +6,8 @@ const productController = new ProductController()
 
 productRoutes.post('/', productController.create)
 productRoutes.get('/', productController.index)
+productRoutes.get('/:id', productController.show)
+productRoutes.put('/:id', productController.update)
+
 productRoutes.delete('/:id', productController.delete)
 module.exports = productRoutes
