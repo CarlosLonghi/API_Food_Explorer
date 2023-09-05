@@ -4,7 +4,9 @@
   "description": "API para entregar dados ao app food explorer",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/server.js"
+    "dev": "nodemon ./src/server.js",
+    "tb:create": "npx knex migrate:make",
+    "migrate:run": "npx knex migrate:latest"
   },
   "keywords": [],
   "author": "Cadu Dev",

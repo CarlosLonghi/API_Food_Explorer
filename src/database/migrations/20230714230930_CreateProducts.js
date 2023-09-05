@@ -5,7 +5,6 @@ exports.up = knex => {
     table.integer('category_id').references('id').inTable('product_category')
     table.text('description')
     table.string('img_url', 245).notNullable()
-    table.string('ingredients', 245).notNullable()
     table.string('price', 100).notNullable()
 
     table.integer('user_id').references('id').inTable('users')
