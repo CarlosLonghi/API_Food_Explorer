@@ -1,22 +1,28 @@
-const knex = require('../database')
+const CategoryRepository = require('../repositories/CategoryRepository');
+const categoryRepository = new CategoryRepository();
 
 class CategoryController {
   async create(request, response) {
     const { name } = request.body
 
     try {
-      await knex('product_category').insert({ name })
-
+      await categoryRepository.create({
+        name
+      })
       return response.status(201).json({ message: 'Categoria cadastrada com sucesso!' })
-  } catch (error) {
-    return response.status(500).json({ error: 'Erro ao cadastrar categoria!' })
-  }
+    } catch (error) {
+      return response.status(500).json({ error: 'Erro ao cadastrar categoria!' })
+    }
   }
 
   async index(request, response) {
-    const productsGet = await knex('product_category')
+    try {
+      const productsGet = await categoryRepository.getAll()
+      return response.json({ message: 'Categorias encontradas com sucesso!', productsGet })
       
-    return response.json(productsGet)
+    } catch (error) {
+      return response.status(500).json({ error: 'Erro ao buscar Categorias!'})
+    }      
   }
 
 }
