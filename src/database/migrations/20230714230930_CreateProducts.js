@@ -2,8 +2,8 @@ exports.up = knex => {
   return knex.schema.createTable('products', table => {
     table.increments('id').primary()
     table.string('name', 100).notNullable()
-    table.integer('category_id').references('id').inTable('product_category')
     table.text('description')
+    table.integer('category_id').references('id').inTable('product_category')
     table.string('img_url', 245).notNullable()
     table.string('price', 100).notNullable()
 
