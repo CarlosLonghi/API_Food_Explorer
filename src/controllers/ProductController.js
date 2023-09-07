@@ -1,55 +1,55 @@
-const knex = require('../database')
+const ProductRepository = require('../repositories/ProductRepository');
+const productRepository = new ProductRepository();
 
 class ProductController {
   async create(request, response) {
-    const { name, description, category_id, img_url, ingredients, price } = request.body
-
-    const categoryExists = await knex('product_category').where('id', category_id).first()
-
-    if (!categoryExists) {
-      return response.status(400).json({ error: 'Categoria não encontrada' })
-    }
+    const { name, description, category_id, img_url, price } = request.body;
 
     try {
-      await knex('products').insert({
+      const categoryExists = await productRepository.categoryExists(category_id);
+      
+      if (!categoryExists) {
+        return response.status(400).json({ error: 'Categoria não encontrada' });
+      }
+
+      await productRepository.create({
         name,
         description,
         category_id,
         img_url,
-        ingredients,
         price
-      })
+      });
 
-      return response.status(201).json({ message: 'Produto cadastrado com sucesso!' })
+      return response.status(201).json({ message: 'Produto cadastrado com sucesso!' });
     } catch (error) {
-      return response.status(500).json({ error: 'Erro ao cadastrar o produto!' })
+      console.error(error);
+      return response.status(500).json({ error: 'Erro ao cadastrar o produto!' });
     }
   }
 
   async update(request, response) {
     const { id } = request.params;
-    const { name, description, category_id, img_url, ingredients, price } = request.body;
-  
+    const { name, description, category_id, img_url, price } = request.body;
+
     try {
-      const productExists = await knex('products').where('id', id).first();
+      const productExists = await productRepository.getById(id);
       if (!productExists) {
         return response.status(404).json({ error: 'Produto não encontrado' });
       }
-  
-      const categoryExists = await knex('product_category').where('id', category_id).first();
+
+      const categoryExists = await productRepository.categoryExists(category_id);
       if (!categoryExists) {
         return response.status(400).json({ error: 'Categoria não encontrada' });
       }
-  
-      await knex('products').where('id', id).update({
+
+      await productRepository.update(id, {
         name,
         description,
         category_id,
         img_url,
-        ingredients,
         price
       });
-  
+
       return response.status(200).json({ message: 'Produto atualizado com sucesso!' });
     } catch (error) {
       return response.status(500).json({ error: 'Erro ao atualizar o produto!' });
@@ -58,38 +58,46 @@ class ProductController {
 
   async index(request, response) {
     const { category_id } = request.query;
-  
-    const productsWithCategory = await knex('products')
-      .join('product_category', 'products.category_id', '=', 'product_category.id')
-      .select('products.*', 'product_category.name as category_name')
-      .where('products.category_id', category_id);
-    return response.json(productsWithCategory);
+
+    try {
+      const productsWithCategory = await productRepository.getAllByCategory(category_id);
+      return response.json(productsWithCategory);
+    } catch (error) {
+      return response.status(500).json({ error: 'Erro ao buscar os produtos!' });
+    }
   }
 
   async show(request, response) {
-    const { id } = request.params
-  
+    const { id } = request.params;
+
     try {
-      // Busca o produto no banco de dados com base no ID
-      const product = await knex('products')
-        .where('id', id)
-        .first();
-  
+      const product = await productRepository.getById(id);
+
       if (!product) {
         return response.status(404).json({ error: 'Produto não encontrado' });
       }
-  
+
       return response.json(product);
     } catch (error) {
       return response.status(500).json({ error: 'Erro ao buscar o produto!' });
     }
   }
-  
-  async delete(request, response) {
-    const { id } = request.params
 
-    await knex('products').where({ id }).delete()
-    return response.json({ message: 'Produto excluído!' })
+  async delete(request, response) {
+    const { id } = request.params;
+
+    try {
+      const productExists = await productRepository.getById(id);
+      if (!productExists) {
+        return response.status(404).json({ error: 'Produto não encontrado' });
+      }
+
+      await productRepository.delete(id);
+
+      return response.json({ message: 'Produto excluído!' });
+    } catch (error) {
+      return response.status(500).json({ error: 'Erro ao excluir o produto!' });
+    }
   }
 }
 

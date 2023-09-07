@@ -27,7 +27,7 @@ class ProductRepository {
     const product = await knex('products').where('id', id).first();
     return product;
   }
-  
+
   async getAllByCategory(category_id) {
     const products = await knex('products').where('category_id', category_id);
     return products;
@@ -35,6 +35,15 @@ class ProductRepository {
 
   async delete(id) {
     await knex('products').where('id', id).del();
+  }
+
+  async categoryExists(category_id) {
+    const category = await knex('product_category')
+      .where({ id: category_id })
+      .select('id')
+      .first();
+
+    return !!category;
   }
 }
 
