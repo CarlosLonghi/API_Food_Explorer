@@ -6,6 +6,11 @@ class CategoryRepository {
 
     return { id: categoryId }
   }
+
+  async getAll() {
+    const categories = await knex('product_category');
+    return categories;
+  }
 }
 
 module.exports = CategoryRepository
