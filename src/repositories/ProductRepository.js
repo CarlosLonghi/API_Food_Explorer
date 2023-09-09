@@ -1,7 +1,7 @@
 const knex = require('../database')
 
 class ProductRepository {
-  async create({ name, description, category_id, img_url,  price }) {
+  async create({ name, description, category_id, img_url,  price, ingredients }) {
     const [productId] = await knex('products').insert({
       name,
       description,
@@ -9,6 +9,15 @@ class ProductRepository {
       img_url,
       price
     })
+
+    const ingredientsInsert = ingredients.map(name => {
+      return {
+        name,
+        product_id: productId
+      }
+    })
+    
+    await knex('product_ingredients').insert(ingredientsInsert);
 
     return { id: productId }
   }

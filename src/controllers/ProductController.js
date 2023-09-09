@@ -3,11 +3,10 @@ const productRepository = new ProductRepository();
 
 class ProductController {
   async create(request, response) {
-    const { name, description, category_id, img_url, price } = request.body;
+    const { name, description, category_id, img_url, price, ingredients } = request.body;
 
     try {
       const categoryExists = await productRepository.categoryExists(category_id);
-      
       if (!categoryExists) {
         return response.status(400).json({ error: 'Categoria não encontrada' });
       }
@@ -17,7 +16,8 @@ class ProductController {
         description,
         category_id,
         img_url,
-        price
+        price, 
+        ingredients
       });
 
       return response.status(201).json({ message: 'Produto cadastrado com sucesso!' });
