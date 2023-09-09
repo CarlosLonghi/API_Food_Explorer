@@ -22,7 +22,7 @@ class ProductRepository {
     return { id: productId }
   }
 
-  async update(id, { name, description, category_id, img_url, price }) {
+  async update(id, { name, description, category_id, img_url, price, ingredients }) {
     await knex('products').where('id', id).update({
       name,
       description,
@@ -30,6 +30,36 @@ class ProductRepository {
       img_url,
       price
     });
+
+    // GET ingredients product
+    const existingIngredients = await knex('product_ingredients')
+    .where('product_id', id)
+    .select('name');
+
+    const existingIngredientsNames = existingIngredients.map(ingredient => ingredient.name);
+
+    // UPDATE/INSERT Ingredients in List
+    for (const ingredientName of ingredients) {
+      if (existingIngredientsNames.includes(ingredientName)) {
+        await knex('product_ingredients')
+          .where({ product_id: id, name: ingredientName })
+          .update({ name: ingredientName });
+      } else {
+        await knex('product_ingredients').insert({
+          name: ingredientName,
+          product_id: id,
+        });
+      }
+    }
+
+    // DELETE Ingredients in List
+    for (const ingredientName of existingIngredientsNames) {
+      if (!ingredients.includes(ingredientName)) {
+        await knex('product_ingredients')
+          .where({ product_id: id, name: ingredientName })
+          .del();
+      }
+    }
   }
 
   async delete(id) {

@@ -29,7 +29,7 @@ class ProductController {
 
   async update(request, response) {
     const { id } = request.params;
-    const { name, description, category_id, img_url, price } = request.body;
+    const { name, description, category_id, img_url, price, ingredients } = request.body;
 
     try {
       const productExists = await productRepository.getById(id);
@@ -47,10 +47,12 @@ class ProductController {
         description,
         category_id,
         img_url,
-        price
+        price, 
+        ingredients
       });
 
       return response.status(200).json({ message: 'Produto atualizado com sucesso!' });
+      
     } catch (error) {
       return response.status(500).json({ error: 'Erro ao atualizar o produto!' });
     }
