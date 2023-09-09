@@ -67,12 +67,27 @@ class ProductRepository {
   }
 
   async getById(id) {
-    const product = await knex('products').where('id', id).first();
+    const product = await knex('products as p')
+      .where('p.id', id)
+      .select('p.id', 'p.name', 'p.description', 'p.category_id', 'p.img_url', 'p.price')
+      .first();
+  
+    if (!product) {
+      return null; 
+    }
+  
+    const ingredients = await knex('product_ingredients')
+      .where('product_id', id)
+      .select('name');
+  
+    product.ingredients = ingredients.map(ingredient => ingredient.name);
+  
     return product;
   }
 
   async getAllByCategory(category_id) {
-    const products = await knex('products').where('category_id', category_id);
+    const products = await knex('products as p').where('category_id', category_id).select('p.id', 'p.name', 'p.description', 'p.category_id', 'p.img_url', 'p.price');
+
     return products;
   }
 
@@ -86,7 +101,7 @@ class ProductRepository {
   }
 
   async search(name) {
-    const product = await knex('products').where('name', name).first()
+    const product = await knex('products as p').where('name', name).select('p.id', 'p.name', 'p.description', 'p.category_id', 'p.img_url', 'p.price').first()
 
     return product
   }
