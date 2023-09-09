@@ -101,7 +101,7 @@ class ProductRepository {
   }
 
   async search(name) {
-    const product = await knex('products as p').where('name', name).select('p.id', 'p.name', 'p.description', 'p.category_id', 'p.img_url', 'p.price').first()
+    const product = await knex('products as p').whereLike('name', `%${name}%`).select('p.id', 'p.name', 'p.description', 'p.category_id', 'p.img_url', 'p.price')
 
     return product
   }

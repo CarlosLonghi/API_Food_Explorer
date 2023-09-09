@@ -59,11 +59,23 @@ class ProductController {
   }
 
   async index(request, response) {
-    const { category_id } = request.query;
+    const { category_id, name } = request.query;
 
     try {
-      const productsWithCategory = await productRepository.getAllByCategory(category_id);
-      return response.json(productsWithCategory);
+      let products;
+
+      if (name) {
+        const product = await productRepository.search(name);
+        if (product) {
+          products = [product];
+        } else {
+          products = [];
+        }
+      } else {
+        products = await productRepository.getAllByCategory(category_id);
+      }
+      return response.json(products);
+
     } catch (error) {
       return response.status(500).json({ error: 'Erro ao buscar os produtos!' });
     }
