@@ -1,6 +1,9 @@
+const { compare } = require('bcryptjs')
+const { sign } = require('jsonwebtoken')
+
 const knex = require('../database')
 const AppError = require('../utils/AppError')
-const { compare } = require('bcryptjs')
+const authConfig = require('../configs/auth')
 
 class SessionsController {
   async create(request, response) {
@@ -16,7 +19,13 @@ class SessionsController {
       throw new AppError('E-mail e/ou Senha incorretos', 401)
     }
 
-    return response.json(user)
+    const { secret, expiresIn } = authConfig.jwt
+    const token = sign({}, secret, {
+      subject: String(user.id),
+      expiresIn
+    })
+
+    return response.json({user, token})
   }
 }
 
