@@ -1,9 +1,12 @@
 const ProductRepository = require('../repositories/ProductRepository');
 const productRepository = new ProductRepository();
+const DiskStorage = require('../providers/DiskStorage');
 
 class ProductController {
   async create(request, response) {
-    const { name, description, category_id, img_url, price, ingredients } = request.body;
+    const { name, description, category_id, price, ingredients } = request.body;
+
+    const imageFileName = request.file.img_url;
 
     try {
       const categoryExists = await productRepository.categoryExists(category_id);
@@ -11,12 +14,15 @@ class ProductController {
         return response.status(400).json({ error: 'Categoria não encontrada' });
       }
 
+      const diskStorage = new DiskStorage();
+      const filename = await diskStorage.saveFile(imageFileName);
+
       await productRepository.create({
         name,
         description,
         category_id,
-        img_url,
-        price, 
+        img_url: filename,
+        price,
         ingredients
       });
 
