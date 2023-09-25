@@ -7,7 +7,8 @@ class ProductRepository {
       description,
       category_id,
       img_url,
-      price
+      price,
+      user_id
     })
 
     const ingredientsInsert = ingredients.map(name => {
