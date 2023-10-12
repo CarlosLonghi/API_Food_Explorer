@@ -7,7 +7,6 @@ exports.up = knex => {
     table.string('img_url', 245).notNullable()
     table.string('price', 100).notNullable()
 
-    table.integer('user_id').references('id').inTable('users')
     table.timestamp('created_at').default(knex.fn.now())
     table.timestamp('updated_at').default(knex.fn.now())
   })

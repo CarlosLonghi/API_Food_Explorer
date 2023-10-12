@@ -6,7 +6,6 @@ class ProductController {
   async create(request, response) {
     const { name, description, category_id, price, ingredients } = request.body;
 
-    const user_id = request.user.id
     const imageFileName = request.file.img_url;
 
     try {
@@ -24,7 +23,6 @@ class ProductController {
         category_id,
         img_url: filename,
         price,
-        user_id,
         ingredients
       });
 
