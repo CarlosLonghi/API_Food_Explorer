@@ -4,7 +4,9 @@ exports.up = knex => {
     table.string('name').notNullable()
     table.string('email').unique().notNullable()
     table.string('password').notNullable()
-    table.boolean('is_admin')
+    table
+    .enum("role", ["admin", "customer"], { useNative: true, enumName: "roles" })
+    .notNullable().default("customer")
   })
 }
 
