@@ -14,6 +14,8 @@ productRoutes.use(ensureAuthenticated)
 
 productRoutes.get('/', productController.index)
 productRoutes.get('/:id', productController.show)
+
+// Erro pode estar nessa rota:
 productRoutes.post('/', verifyUserAuthorization("admin"), upload.single("img_url"), productController.create)
 productRoutes.put('/:id', verifyUserAuthorization("admin"), productController.update)
 productRoutes.delete('/:id', verifyUserAuthorization("admin"), productController.delete)
